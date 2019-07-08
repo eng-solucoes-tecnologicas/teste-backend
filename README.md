@@ -6,7 +6,7 @@ A ENG é uma startup que cria soluções e produtos integrando seu hardware com 
 
 Atuamos no desenvolvimento de produtos nos mais variados segmentos como Agronegócio, Automotivo, Energia, IoT, Telecomunicações entre outros, em empresas de diversas áreas de atuação
 
-Quer conhecer mais sobre a empresa? https://engtecnologia.com/
+Quer conhecer mais sobre a empresa? <https://engtecnologia.com/>
 
 ## Sobre a vaga
 
@@ -52,7 +52,7 @@ Retorno da consulta da fazenda
   "id": Long,
   "nome": String,
   "endereco": String,
-  "lotes": Array de ObjectId (relacionamento 1 para n do mongo),
+  "lotes": [ObjectId],
   "createdAt": Date,
   "updatedAt": Date
 }
