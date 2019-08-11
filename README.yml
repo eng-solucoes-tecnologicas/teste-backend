@@ -1,107 +1,154 @@
-# Teste para desenvolvedor Backend
-
-## Por que trabalhar na ENG
-
-A ENG é uma startup que cria soluções e produtos integrando seu hardware com o software, nossos projetos se baseiam no desenvolvimento de hardware, sistemas embarcados entre outros.
-
-Atuamos no desenvolvimento de produtos nos mais variados segmentos como Agronegócio, Automotivo, Energia, IoT, Telecomunicações entre outros, em empresas de diversas áreas de atuação
-
-Quer conhecer mais sobre a empresa? <https://engtecnologia.com/>
-
-## Sobre a vaga
-
-Queremos um desenvolvedor backend para nos ajudar a inovar com soluções completas a nível de hardware e software que acarretam em um melhor estilo de vida para nossos clientes e promovendo assim a inovação e sustentabilidade nos nossos projetos.
-
-O dia-a-dia do desenvolvedor será trabalhar junto com a equipe na elaboração e melhorias de algumas rotinas do sistema.
-
-O desenvolvedor irá trabalhar em vários projetos de diferentes escopos, se você não se sente intimidado por novos desafios e adora se reinventar e usar a criatividade, então essa vaga é pra você.
-
-Os requisitos são:
-
-## Requisitos
-
-* Ter disponibilidade para trabalhar em Campo Grande/MS.
-* Ter excelente comunicação.
-* Conhecer metodologias ágeis.
-* Ter experiência nos seguintes itens:
-  * NodeJs+ (ECMAScript 6)
-  * Mongo
-  * Linux Básico
-  * Documentação e boas práticas de API's RestFull
-  * Git
-* Diferenciais:
-  * Typescript
-  * Docker
-  * Integração e Deploy contínuo
-  * Testes unitários
-
-## Tecnologias para o desafio
-
-* Node.js
-* Mongoose (ODM para mongo)
-* Framework de documentação de API (Swagger ou similares)
-
-## O Desafio
-
-Você deverá criar uma **API REST** que possa cadastrar fazendas, lotes e associar um ou mais lotes a uma fazenda. Deve também ser possível consultar a lista de todos os lotes (paginação será um diferencial) e também apenas uma fazenda por Nome. A consulta de fazendas deve retornar um Json igual o abaixo.
-
-Retorno da consulta da fazenda
-
-```json
-{
-  "id": Long,
-  "nome": String,
-  "endereco": String,
-  "lotes": [ObjectId],
-  "createdAt": Date,
-  "updatedAt": Date
-}
-```
-
-Retorno da consulta do Lote
-
-```json
-{
-  "nome": String,
-  "fazenda": ObjectId,
-  "quantAnimais": Number,
-  "createdAt": Date,
-  "updatedAt": Date
-}
-```
-
-JSON's de cadastro
-
-Fazenda
-
-```json
-{
-  "nome": String,
-  "endereco": String
-}
-```
-
-Lote
-
-```json
-{
-  "nome": String,
-  "endereco": String,
-  "fazenda": ObjectId
-}
-```
-
-**Se atentar ao cadastrar um novo lote atualizar também a lista de lotes daquela fazenda para manter a consistência**
-**É importante que as entradas sejam validadas**
-
-## Como devo entregar o desafio
-
-* Crie uma branch a partir da branch master deste respositório.
-* Implemente o código do desafio.
-* Faça um push de sua branch com o desafio implementado.
-* Crie um pull request para branch master.
-* Envie um email para (contato@engtecnologia.com) com o nome de sua branch informando que você concluiu o projeto.
-
-## Restou alguma dúvida
-
-Você pode enviar um email para: contato@engtecnologia.com
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Crud de fazendas e lotes ENG
+  description: backend simples que implementa o crud como micro serviço
+servers: 
+  - url: http://localhost:3000/fazendas
+    description:     CRUD de fazendas
+  - url: https://localhost:3000/lotes
+    description:     CRUD de lotes
+tags: 
+  - name: Fazendas
+paths:
+  /lotes:
+    get:
+      tags: 
+        - Lotes
+      summary: Lista todos os lotes
+      description: Retorna uma lista com todos os lotes cadastrados
+      operationId: "readAll"
+      parameters: 
+        - $ref: '#/components/parameters/nome'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/max'
+      responses:
+        200:
+          description: A lista de lotes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lote'
+        400:
+          $ref: 'Erro referente á validação do documento'
+    post:
+      tags: 
+        - lote
+      summary: Insere uma fazenda no Banco de Dados
+      description: Realiza a inserção de um documento na collection de lotes
+      operationId: create
+      requestBody:
+        description: O Lote
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lote'
+      responses:
+        200:
+          description: Lote criado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lote'
+        400:
+          description: Erro referente à validação do documento
+        500:
+          $ref: '#/components/responses/erro500'
+  /fazendas:
+    parameters: 
+      - $ref: '#/components/parameters/nome'
+    get:
+      tags: 
+        - Fazendas
+      summary: Lista uma Fazenda
+      description: 'Retorna uma fazenda que tenha o nome informado no corpo da requisição'
+      operationId: readByName
+      responses:
+        200:
+          description: A fazenda
+        400: 
+          description: Nome não pode estar em branco ou nada foi encontrado
+        500:
+          $ref: '#/components/responses/erro500'
+    put:
+      tags: 
+        - Fazenda
+      summary: Atualiza uma Fazenda
+      description: 'atualiza a fazenda de pelo id, com os parametros, todos informados no corpo da requisição'
+      operationId: update
+      requestBody:
+        description: 'os parâmetros e o id para serem atualizados'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fazenda'
+      responses:
+        200:
+          description: Fazenda atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fazenda'
+        404:
+          description: erro referente à validação do documento
+        500:
+          $ref: '#/components/responses/erro500'
+    delete:
+      tags: 
+        - Fazenda
+      summary: soft delete de uma fazenda
+      description: adiciona delete=true à fazenda de id informado no corpo da requisição
+      operationId: softDelete
+      responses:
+        200:
+          description: Fazenda deletada com sucesso.
+        400:
+          description: id não pode estar em branco
+        500:
+          $ref: '#/components/responses/erro500'
+components:
+  responses:
+    erro500:
+      description: :(.
+  schemas:
+    Lote: 
+      required:
+        - _nome
+        - _endereco
+      properties:
+        id: 
+          type: ObjectId
+    Fazenda:
+      required: 
+        - _nome
+      properties:
+        id:
+         type: ObjectId
+        _nome:
+          type: String
+        _endereco:
+          type: String
+    Fazendas:
+      type: array
+      items:
+        $ref: '#/components/schemas/Fazenda'
+  parameters:
+    nome:
+      name: nome
+      in: path
+      description: o nome do lote ou fazenda
+      required: true
+      schema:
+        type: String
+    page:
+      name: page
+      in: query
+      description: Numero da pagina
+      schema:
+        type: integer
+    max:
+      name: max
+      in: query
+      description: maximo de fazendas ou lotes por pagina
+      schema:
+        type: integer
