@@ -1,0 +1,28 @@
+{
+  "name": "engapibackend",
+  "version": "1.0.0",
+  "description": "API Básica do CRUD de Fazendas e Lotes do teste de back-end da ENG",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js --watch \"./\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eng-solucoes-tecnologicas/teste-backend.git"
+  },
+  "author": "Carlos Cunha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eng-solucoes-tecnologicas/teste-backend/issues"
+  },
+  "homepage": "https://github.com/eng-solucoes-tecnologicas/teste-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "consign": "^0.1.6",
+    "express": "^4.17.1",
+    "express-routes": "0.0.2",
+    "mongoose": "^5.6.7",
+    "mongoose-delete": "^0.5.0"
+  },
+  "devDependencies": {}
+}
